@@ -15,15 +15,27 @@
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2.7</string>
+	<string>$(MODULE_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.2.7</string>
+	<string>$(MODULE_VERSION)</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>CPUTune</key>
 		<dict>
+			<key>AllowUnrestrictedFS</key>
+			<true/>
 			<key>CFBundleIdentifier</key>
 			<string>org.syscl.driver.CPUTune</string>
+			<key>EnableProcHot</key>
+			<false/>
+			<key>EnableSpeedShift</key>
+			<false/>
+			<key>EnableTurboBoost</key>
+			<false/>
+			<key>HWPRequestConfigPath</key>
+			<string>/tmp/HWPRequest.conf</string>
 			<key>IOClass</key>
 			<string>CPUTune</string>
 			<key>IOMatchCategory</key>
@@ -32,26 +44,16 @@
 			<string>IOResources</string>
 			<key>IOResourceMatch</key>
 			<string>IOKit</string>
+			<key>ProcHotAtRuntime</key>
+			<string>/tmp/CPUTuneProcHotRT.conf</string>
 			<key>SpeedShiftAtRuntime</key>
 			<string>/tmp/CPUTuneSpeedShiftRT.conf</string>
 			<key>TurboBoostAtRuntime</key>
 			<string>/tmp/CPUTuneTurboBoostRT.conf</string>
-			<key>ProcHotAtRuntime</key>
-			<string>/tmp/CPUTuneProcHotRT.conf</string>
-			<key>HWPRequestConfigPath</key>
-			<string>/tmp/HWPRequest.conf</string>
 			<key>TurboRatioLimitConfigPath</key>
 			<string>/tmp/TurboRatioLimit.conf</string>
-			<key>EnableSpeedShift</key>
-			<true/>
 			<key>UpdateInterval</key>
 			<integer>1000</integer>
-			<key>EnableTurboBoost</key>
-			<false/>
-			<key>EnableProcHot</key>
-			<false/>
-			<key>AllowUnrestrictedFS</key>
-			<false/>
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>

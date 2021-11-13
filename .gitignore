@@ -1,6 +1,5 @@
 *.xccheckout
 .DS_Store
-Build
 DerivedData
 Distribute
 xcuserdata

@@ -17,9 +17,11 @@ public:
     ~SIPTune();
     
     bool getCSRActiveConfig(uint32_t flag) const;
-    void allowUnrestrictedFS(void) { setBootCSRActiveConfig(CSR_ALLOW_UNRESTRICTED_FS); };
     void allowUntrustedKexts(void) { setBootCSRActiveConfig(CSR_ALLOW_UNTRUSTED_KEXTS); };
-    
+    void allowUnrestrictedFS(void) { setBootCSRActiveConfig(CSR_ALLOW_UNRESTRICTED_FS); };
+    void allowTaskForPID(void) { setBootCSRActiveConfig(CSR_ALLOW_TASK_FOR_PID); };
+    void allowUnrestrictedDtrace(void) { setBootCSRActiveConfig(CSR_ALLOW_UNRESTRICTED_DTRACE); };
+    void allowUnrestrictedNVRAM(void) { setBootCSRActiveConfig(CSR_ALLOW_UNRESTRICTED_NVRAM); };
     
 private:
     uint32_t *gBootCSRActiveConfig = nullptr;

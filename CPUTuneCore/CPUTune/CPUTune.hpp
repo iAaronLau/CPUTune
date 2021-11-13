@@ -32,7 +32,7 @@ private:
     const char *hwpRequestConfigPath = nullptr;
     const char *turboRatioLimitConfigPath = nullptr;
     uint32_t updateInterval = 2000;
-    bool enableIntelTurboBoost = true;
+    bool enableIntelTurboBoost = false;
     bool enableIntelProcHot = false;
     bool supportedSpeedShift = false;
     // As 64-ia-32-architectures-software-developer-vol-3b-part-2-manual (Vol. 3B 14-7)
