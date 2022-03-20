@@ -37,7 +37,7 @@ private:
     bool supportedSpeedShift = false;
     // As 64-ia-32-architectures-software-developer-vol-3b-part-2-manual (Vol. 3B 14-7)
     // Only RESET will clear this bit.
-    bool enableIntelSpeedShift = true;
+    bool enableIntelSpeedShift = false;
     bool hwpEnableOnceSet = false;
     
     static constexpr uint64_t kEnableTurboBoostBits  = ((uint64_t)-1) ^ ((uint64_t)1) << 38;
@@ -77,7 +77,7 @@ private:
     SIPTune sip_tune;
     NVRAMUtils nvram;
     
-    bool allowUnrestrictedFS = false;
+    bool allowUnrestrictedFS = true;
     
     uint64_t org_MSR_IA32_MISC_ENABLE;
     uint64_t org_MSR_IA32_PERF_CTL;
