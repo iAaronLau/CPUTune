@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CDC7D12C274031BF0071DB9A /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDC7D12B274031BF0071DB9A /* libkmod.a */; };
+		CD3B61E32899BDD5007E2988 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD3B61E22899BDD4007E2988 /* libkmod.a */; };
 		E806014721A7D22600B4E214 /* kern_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E806014521A7D22600B4E214 /* kern_util.cpp */; };
 		E806014821A7D22600B4E214 /* kern_util.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E806014621A7D22600B4E214 /* kern_util.hpp */; };
 		E80B7FCC21AB278B00B8793B /* csr.h in Headers */ = {isa = PBXBuildFile; fileRef = E80B7FCB21AB278B00B8793B /* csr.h */; };
@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CDC7D12B274031BF0071DB9A /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
+		CD3B61E22899BDD4007E2988 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		E806014521A7D22600B4E214 /* kern_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_util.cpp; sourceTree = "<group>"; };
 		E806014621A7D22600B4E214 /* kern_util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_util.hpp; sourceTree = "<group>"; };
 		E80B7FCB21AB278B00B8793B /* csr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = csr.h; sourceTree = "<group>"; };
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDC7D12C274031BF0071DB9A /* libkmod.a in Frameworks */,
+				CD3B61E32899BDD5007E2988 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +53,7 @@
 		CDC7D12A274031BF0071DB9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CDC7D12B274031BF0071DB9A /* libkmod.a */,
+				CD3B61E22899BDD4007E2988 /* libkmod.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -137,7 +137,7 @@
 		E8D5860B21A7BB1C001CCF6A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1320;
 				ORGANIZATIONNAME = syscl;
 				TargetAttributes = {
 					E8D5861321A7BB1C001CCF6A = {
@@ -321,16 +321,16 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.2.7;
+				CURRENT_PROJECT_VERSION = 2.2.8;
 				INFOPLIST_FILE = CPUTune/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MARKETING_VERSION = 2.2.7;
+				MARKETING_VERSION = 2.2.8;
 				MODULE_NAME = org.syscl.driver.CPUTune;
-				MODULE_VERSION = 2.2.7;
+				MODULE_VERSION = 2.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = org.syscl.driver.CPUTune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -344,16 +344,16 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.2.7;
+				CURRENT_PROJECT_VERSION = 2.2.8;
 				INFOPLIST_FILE = CPUTune/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MARKETING_VERSION = 2.2.7;
+				MARKETING_VERSION = 2.2.8;
 				MODULE_NAME = org.syscl.driver.CPUTune;
-				MODULE_VERSION = 2.2.7;
+				MODULE_VERSION = 2.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = org.syscl.driver.CPUTune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;

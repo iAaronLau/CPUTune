@@ -123,7 +123,7 @@ enum KernelVersion {
     Catalina      = 19,
     BigSur        = 20,
     Monterey      = 21,
-    Unsupported
+    Ventura       = 22
 };
 
 /**
