@@ -22,10 +22,9 @@ public:
     bool setKextPanicKey(void) const;
     bool clearKextPanicKey(void) const;
     bool isKextPanicLastBoot(void) const;
-    
+
 private:
     IODTNVRAM *getNVRAMEntry(void) const;
 };
-
 
 #endif /* NVRAMUtils_hpp */

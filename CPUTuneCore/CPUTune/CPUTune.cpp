@@ -6,12 +6,13 @@
 //
 
 #include <i386/proc_reg.h>
-#include <CPUTune.hpp>
-#include <CPUInfo.hpp>
-#include <SIPTune.hpp>
-#include <kern_util.hpp>
 #include <IOKit/IOTimerEventSource.h>
 #include <sys/errno.h>
+
+#include "CPUTune.hpp"
+#include "CPUInfo.hpp"
+#include "SIPTune.hpp"
+#include "kern_util.hpp"
 
 OSDefineMetaClassAndStructors(CPUTune, IOService)
 
@@ -34,7 +35,7 @@ bool CPUTune::init(OSDictionary *dict)
         LOG("Found %s key being set in NVRAM, CPUTune(%s) supportted kernel version %d, clear the panic key", kCPUTUNE_PANIC_KEY, kmod_info.version, getKernelVersion());
         nvram.clearKextPanicKey();
     }
-    
+
     bool isDisabled = checkKernelArgument("-s") |
                       checkKernelArgument("-x") |
                       checkKernelArgument(bootargOff);
@@ -46,7 +47,7 @@ bool CPUTune::init(OSDictionary *dict)
         LOG("super init failed!");
         return false;
     }
-    
+
     // get string properties
     ProcHotPath = getStringPropertyOrElse("ProcHotAtRuntime", nullptr);
     turboBoostPath = getStringPropertyOrElse("TurboBoostAtRuntime", nullptr);
@@ -58,12 +59,12 @@ bool CPUTune::init(OSDictionary *dict)
     enableIntelProcHot = getBooleanOrElse("EnableProcHot", false);
     enableIntelSpeedShift = getBooleanOrElse("EnableSpeedShift", false);
     allowUnrestrictedFS = getBooleanOrElse("AllowUnrestrictedFS", false);
-    
+
     if (OSNumber *timeout = OSDynamicCast(OSNumber, getProperty("UpdateInterval"))) {
         updateInterval = timeout->unsigned32BitValue();
         LOG("Update time interval %u ms per cycle", updateInterval);
     }
-    
+
     org_MSR_IA32_MISC_ENABLE = rdmsr64(MSR_IA32_MISC_ENABLE);
     org_MSR_IA32_PERF_CTL = rdmsr64(MSR_IA32_PERF_CTL);
     org_MSR_IA32_POWER_CTL = rdmsr64(MSR_IA32_POWER_CTL);
@@ -72,7 +73,7 @@ bool CPUTune::init(OSDictionary *dict)
         org_HWPRequest = rdmsr64(MSR_IA32_HWP_REQUEST);
     }
     org_TurboRatioLimit = rdmsr64(MSR_TURBO_RATIO_LIMIT);
-    
+
     LOG("succeeded!");
     return true;
 }
@@ -97,12 +98,12 @@ bool CPUTune::start(IOService *provider)
         LOG("cannot start provider or provider does not exist.");
         return false;
     }
-    
+
     // let's turn off some of the SIP bits so that we can debug it easily on a real mac
     if (allowUnrestrictedFS) {
         sip_tune.allowUnrestrictedFS();
     }
-    
+
     // set up time event
     myWorkLoop = static_cast<IOWorkLoop *>(getWorkLoop());
     timerSource = IOTimerEventSource::timerEventSource(this,
@@ -112,15 +113,15 @@ bool CPUTune::start(IOService *provider)
         // Handle error (typically by returning a failure result).
         return false;
     }
-    
+
     if (myWorkLoop->addEventSource(timerSource) != kIOReturnSuccess) {
         LOG("failed to add timer event source to work loop!");
         // Handle error (typically by returning a failure result).
         return false;
     }
-    
+
     timerSource->setTimeoutMS(updateInterval);
-    
+
     // check if we need to enable Intel Turbo Boost
     if (enableIntelTurboBoost) {
         enableTurboBoost();
@@ -134,7 +135,7 @@ bool CPUTune::start(IOService *provider)
     } else {
         disableProcHot();
     }
-    
+
     // check if we need to enable Intel Speed Shift on platform on Skylake+
     if (cpu_info.supportedHWP) {
         if (!hwpEnableOnceSet && enableIntelSpeedShift) {
@@ -147,7 +148,7 @@ bool CPUTune::start(IOService *provider)
     } else {
         LOG("cpu model (0x%x) does not support Intel SpeedShift.", cpu_info.model);
     }
-    
+
     LOG("registerService");
     registerService();
     return true;
@@ -172,7 +173,7 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             deleter(buffer);
         }
     }
-    
+
     // Turbo ratio limit
     if ((rdmsr64(MSR_IA32_MISC_ENABLE) & kEnableTurboBoostBits) && cpu_info.turboRatioLimitRW && turboRatioLimitConfigPath) {
         size_t valid_length = cpu_info.coreCount * 2 + 2; // +2 for '0x'/'0X'
@@ -201,7 +202,6 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             deleter(buffer);
         }
     }
-    
     // set hwp request value if hwp is enable
     if (cpu_info.supportedHWP && hwpRequestConfigPath) {
         if (uint8_t *hex = readFileAsBytes(hwpRequestConfigPath, 0, 10)) {
@@ -220,7 +220,7 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             }
         }
     }
-    
+
     if (!hwpEnableOnceSet && cpu_info.supportedHWP && speedShiftPath) {
         if (uint8_t *buffer = readFileAsBytes(speedShiftPath, 0, 1)) {
             if (*buffer == '1') {
@@ -231,7 +231,6 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             deleter(buffer);
         }
     }
-    
     // restart the timer
     if (timerSource && !this->isInactive()) {
         // Don't use sender here which will cause MBP8,2(SANDYBRIDGE) KP
@@ -310,7 +309,6 @@ void CPUTune::stop(IOService *provider)
         timerSource->release();
         timerSource = 0;
     }
-
     // restore the previous MSR_IA32 state
     const uint64_t cur_ctk = rdmsr64(MSR_IA32_POWER_CTL);
     if (setIfNotEqual(cur_ctk, org_MSR_IA32_POWER_CTL, MSR_IA32_POWER_CTL)) {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD3B61E32899BDD5007E2988 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD3B61E22899BDD4007E2988 /* libkmod.a */; };
+		CD56587D2971B7DF007B2B7F /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD56587C2971B7DF007B2B7F /* libkmod.a */; };
 		E806014721A7D22600B4E214 /* kern_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E806014521A7D22600B4E214 /* kern_util.cpp */; };
 		E806014821A7D22600B4E214 /* kern_util.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E806014621A7D22600B4E214 /* kern_util.hpp */; };
 		E80B7FCC21AB278B00B8793B /* csr.h in Headers */ = {isa = PBXBuildFile; fileRef = E80B7FCB21AB278B00B8793B /* csr.h */; };
@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CD3B61E22899BDD4007E2988 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
+		CD56587C2971B7DF007B2B7F /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		E806014521A7D22600B4E214 /* kern_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_util.cpp; sourceTree = "<group>"; };
 		E806014621A7D22600B4E214 /* kern_util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_util.hpp; sourceTree = "<group>"; };
 		E80B7FCB21AB278B00B8793B /* csr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = csr.h; sourceTree = "<group>"; };
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD3B61E32899BDD5007E2988 /* libkmod.a in Frameworks */,
+				CD56587D2971B7DF007B2B7F /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +53,7 @@
 		CDC7D12A274031BF0071DB9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CD3B61E22899BDD4007E2988 /* libkmod.a */,
+				CD56587C2971B7DF007B2B7F /* libkmod.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

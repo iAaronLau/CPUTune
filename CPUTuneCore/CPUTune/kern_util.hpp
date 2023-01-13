@@ -123,7 +123,8 @@ enum KernelVersion {
     Catalina      = 19,
     BigSur        = 20,
     Monterey      = 21,
-    Ventura       = 22
+    Ventura       = 22,
+    Unsupported   = 23
 };
 
 /**
@@ -229,7 +230,7 @@ inline constexpr char getBuildMonth() {
         case ' ceD':
             return "12"[i];
     }
-    
+
     return '0';
 }
 
@@ -262,6 +263,5 @@ static const char kextVersion[] {
  *  @return allocated buffer on success or nullptr on error
  */
 EXPORT uint8_t *readFileAsBytes(const char* path, off_t off, size_t bytes);
-
 
 #endif /* kern_util_hpp */

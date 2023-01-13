@@ -15,7 +15,6 @@
 #include <IOKit/IONVRAM.h>
 #include <IOKit/IORegistryEntry.h>
 
-
 bool NVRAMUtils::setKextPanicKey(void) const {
     return this->setProperty(kCPUTUNE_PANIC_KEY, osrelease, static_cast<unsigned int>(strlen(osrelease)));
 }
@@ -40,14 +39,14 @@ IODTNVRAM *NVRAMUtils::getNVRAMEntry(void) const {
         LOG("Failed to get NVRAM entry!");
         return nullptr;
     }
-    
+
     IODTNVRAM *nvram = OSDynamicCast(IODTNVRAM, entry);
     if (!nvram) {
         entry->release();
         LOG("Failed to cast to IODTNVRAM entry!");
         return nullptr;
     }
-    
+
     return nvram;
 }
 
@@ -55,12 +54,12 @@ int NVRAMUtils::getProperty(const char *symbol, void *value, size_t *len) const 
     if (!symbol || !len) {
         return 0;
     }
-    
+
     IODTNVRAM *nvram = this->getNVRAMEntry();
     if (nvram == nullptr) {
         return 0;
     }
-    
+
     size_t vlen = *len;
     *len = 0;
     OSObject *o = nvram->getProperty(symbol);
@@ -98,7 +97,6 @@ int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) c
     if (symbol == nullptr || value == nullptr) {
         return 0;
     }
-    
     // Get the symbol as an OSSymbol
     const OSSymbol *sym = OSSymbol::withCStringNoCopy(symbol);
     if (sym == nullptr) {
@@ -110,7 +108,6 @@ int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) c
         sym->release();
         return 0;
     }
-    
     // Get the NVRAM registry entry
     IODTNVRAM *nvram = this->getNVRAMEntry();
     if (nvram == nullptr) {
@@ -118,7 +115,6 @@ int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) c
         data->release();
         return 0;
     }
-    
     // Set nvram property
     int ret = nvram->setProperty(sym, data);
     nvram->sync();
@@ -132,19 +128,17 @@ int NVRAMUtils::removeProperty(const char *symbol) const {
     if (!symbol) {
         return 0;
     }
-    
+
     const OSSymbol *sym = OSSymbol::withCStringNoCopy(symbol);
     if (sym == nullptr) {
         return 0;
     }
-    
     // Get the NVRAM registry entry
     IODTNVRAM *nvram = getNVRAMEntry();
     if (nvram == nullptr) {
         sym->release();
         return 0;
     }
-    
     // Remove the symbol
     nvram->removeProperty(sym);
     nvram->sync();

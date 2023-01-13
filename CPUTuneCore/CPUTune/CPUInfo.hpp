@@ -46,37 +46,37 @@ public:
               coreCount,
               (turboRatioLimitRW ? "RW" : "RO"));
     };
-    
+
     /**
      * Intel CPU models
      */
     const uint8_t model;
-    
+
     /**
      *  CPU support HWP
      */
     const bool supportedHWP;
-    
+
     /**
      * CPU Cores Count
      */
     const uint8_t coreCount;
-    
+
     const bool turboRatioLimitRW;
-    
+
     /**
      *  Get current CPU model.
      *
      *  @return detected CPU model
      */
     const uint8_t getCPUModel(void) const;
-    
+
     const bool supportedSpeedShift(void) const;
-    
+
     const uint8_t getCoreCount(void) const;
-    
+
     const bool getTurboRatioLimitRW(void) const;
-    
+
     /**
     *  Intel CPU models as returned by CPUID
     *  The list is synchronised and updated with XNU source code (osfmk/i386/cpuid.h).
@@ -126,6 +126,7 @@ public:
         CPU_MODEL_ROCKETLAKE_S   =  0xA7, /* desktop RocketLake */
         CPU_MODEL_TIGERLAKE_U    =  0x8C,
         CPU_MODEL_ALDERLAKE_S    =  0x97,
+        CPU_MODEL_RAPTORLAKE_S   =  0xB7,
     };
 };
 
