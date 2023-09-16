@@ -9,9 +9,11 @@
 #define SIPTune_hpp
 
 #include <pexpert/pexpert.h>
+
 #include "csr.h"
 
-class SIPTune {
+class SIPTune
+{
 public:
     SIPTune();
     ~SIPTune();
@@ -26,7 +28,6 @@ public:
 private:
     uint32_t *gBootCSRActiveConfig = nullptr;
     uint32_t *getBootCSRActiveConfig(void) const;
-
     // Combination usage e.g. flag = (CSR_ALLOW_UNTRUSTED_KEXTS + CSR_ALLOW_UNRESTRICTED_FS)
     void setBootCSRActiveConfig(const uint32_t flag);
 };

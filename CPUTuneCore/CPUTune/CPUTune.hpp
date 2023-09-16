@@ -9,6 +9,7 @@
 #define CPUTune_hpp
 
 #include <IOKit/IOService.h>
+
 #include "CPUInfo.hpp"
 #include "SIPTune.hpp"
 #include "NVRAMUtils.hpp"
@@ -66,7 +67,6 @@ private:
 
     const char* getStringPropertyOrElse(const char*, const char*) const;
     const bool getBooleanOrElse(const char*, const bool) const;
-
     // As per Apple, don't declare default constructor.
     // The default constuctor CPUTune() will do the following
     // implictly: cpu_info(CPUInfo()), sip_tune(SIPTune()), nvram(NVRAMUtils())
@@ -82,7 +82,6 @@ private:
     uint64_t org_MSR_IA32_POWER_CTL;
     uint64_t org_HWPRequest;
     uint64_t org_TurboRatioLimit;
-
     uint64_t org_MSR_IA32_PM_ENABLE;
 
     template<typename T>

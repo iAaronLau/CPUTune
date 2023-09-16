@@ -101,7 +101,8 @@ extern kmod_info_t kmod_info;
 /**
  * C-stylememory management from libkern, missing from headers
  */
-extern "C" {
+extern "C"
+{
     extern void *kern_os_malloc(size_t size);
     extern void *kern_os_realloc(void * addr, size_t size);
     extern void kern_os_free(void * addr);
@@ -110,7 +111,8 @@ extern "C" {
 /**
  *  Known kernel versions
  */
-enum KernelVersion {
+enum KernelVersion
+{
     SnowLeopard   = 10,
     Lion          = 11,
     MountainLion  = 12,
@@ -124,7 +126,8 @@ enum KernelVersion {
     BigSur        = 20,
     Monterey      = 21,
     Ventura       = 22,
-    Unsupported   = 23
+    Sonoma        = 23,
+    Unsupported   = 24
 };
 
 /**
@@ -137,7 +140,8 @@ using KernelMinorVersion = int;
  *
  *  @return numeric kernel version
  */
-inline KernelVersion getKernelVersion() {
+inline KernelVersion getKernelVersion()
+{
     return static_cast<KernelVersion>(version_major);
 }
 
@@ -146,7 +150,8 @@ inline KernelVersion getKernelVersion() {
  *
  *  @return numeric minor kernel version
  */
-inline KernelMinorVersion getKernelMinorVersion() {
+inline KernelMinorVersion getKernelMinorVersion()
+{
     return static_cast<KernelMinorVersion>(version_minor);
 }
 
@@ -157,7 +162,8 @@ inline KernelMinorVersion getKernelMinorVersion() {
  *
  *  @return true if argument was passed
  */
-inline bool checkKernelArgument(const char *name) {
+inline bool checkKernelArgument(const char *name)
+{
     int val[16];
     return PE_parse_boot_argn(name, val, sizeof(val));
 }
@@ -169,7 +175,8 @@ inline bool checkKernelArgument(const char *name) {
  *
  *  @return numeric kernel version
  */
-constexpr size_t parseModuleVersion(const char *version) {
+constexpr size_t parseModuleVersion(const char *version)
+{
     return (version[0] - '0') * 100 + (version[2] - '0') * 10 + (version[4] - '0');
 }
 
@@ -180,7 +187,8 @@ constexpr size_t parseModuleVersion(const char *version) {
  *
  *  @return long integer base 10
  */
-inline long hexToInt(const char *hex) {
+inline long hexToInt(const char *hex)
+{
     int base = 16;
     for (const char *c = hex; *c != '\0'; c++) {
         if (*c == 'x' || *c== 'X') {
@@ -195,13 +203,15 @@ inline long hexToInt(const char *hex) {
  *  Slightly non-standard helpers to get the date in a YYYY-MM-DD format.
  */
 template <size_t i>
-inline constexpr char getBuildYear() {
+inline constexpr char getBuildYear()
+{
     static_assert(i < 4, "Year consists of four digits");
     return __DATE__[7+i];
 }
 
 template <size_t i>
-inline constexpr char getBuildMonth() {
+inline constexpr char getBuildMonth()
+{
     static_assert(i < 2, "Month consists of two digits");
     auto mon = *reinterpret_cast<const uint32_t *>(__DATE__);
     switch (mon) {
@@ -235,19 +245,22 @@ inline constexpr char getBuildMonth() {
 }
 
 template <size_t i>
-inline constexpr char getBuildDay() {
+inline constexpr char getBuildDay()
+{
     static_assert(i < 2, "Day consists of two digits");
     if (i == 0 && __DATE__[4+i] == ' ')
         return '0';
     return __DATE__[4+i];
 }
 
-static const char kextVersion[] {
+static const char kextVersion[]
+{
 #ifdef DEBUG
     'D', 'B', 'G', '-',
 #else
     'R', 'E', 'L', '-',
 #endif
+
     xStringify(MODULE_VERSION)[0], xStringify(MODULE_VERSION)[2], xStringify(MODULE_VERSION)[4], '-',
     getBuildYear<0>(), getBuildYear<1>(), getBuildYear<2>(), getBuildYear<3>(), '-',
     getBuildMonth<0>(), getBuildMonth<1>(), '-', getBuildDay<0>(), getBuildDay<1>(), '\0'

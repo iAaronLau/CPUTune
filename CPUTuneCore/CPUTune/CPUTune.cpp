@@ -16,21 +16,25 @@
 
 OSDefineMetaClassAndStructors(CPUTune, IOService)
 
-IOService *CPUTune::probe(IOService *provider, SInt32 *score) {
+IOService *CPUTune::probe(IOService *provider, SInt32 *score)
+{
     setProperty("VersionInfo", kextVersion);
     setProperty("Author", "syscl");
     IOService* service = IOService::probe(provider, score);
+
     return service;
 }
 
 bool CPUTune::init(OSDictionary *dict)
 {
     LOG("CPUTune(%s) starting on macOS Darwin %d.%d.", kmod_info.version, getKernelVersion(), getKernelMinorVersion());
+
     if (getKernelVersion() >= KernelVersion::Unsupported && !checkKernelArgument(bootargBeta)) {
-        LOG("Unsupported kernel version: %d, get a CPUTune that supports current kernel from https://github.com/syscl/CPUTune", getKernelVersion());
+        LOG("Unsupported kernel version: %d, get a CPUTune that supports current kernel from https://github.com/asepms92/CPUTune", getKernelVersion());
         nvram.setKextPanicKey();
         return false;
-    } else if (nvram.isKextPanicLastBoot()) {
+    }
+    else if (nvram.isKextPanicLastBoot()) {
         // clear the panic key
         LOG("Found %s key being set in NVRAM, CPUTune(%s) supportted kernel version %d, clear the panic key", kCPUTUNE_PANIC_KEY, kmod_info.version, getKernelVersion());
         nvram.clearKextPanicKey();
@@ -39,6 +43,7 @@ bool CPUTune::init(OSDictionary *dict)
     bool isDisabled = checkKernelArgument("-s") |
                       checkKernelArgument("-x") |
                       checkKernelArgument(bootargOff);
+
     if (isDisabled) {
         LOG("not allow to run.");
         return false;
@@ -47,7 +52,6 @@ bool CPUTune::init(OSDictionary *dict)
         LOG("super init failed!");
         return false;
     }
-
     // get string properties
     ProcHotPath = getStringPropertyOrElse("ProcHotAtRuntime", nullptr);
     turboBoostPath = getStringPropertyOrElse("TurboBoostAtRuntime", nullptr);
@@ -68,24 +72,29 @@ bool CPUTune::init(OSDictionary *dict)
     org_MSR_IA32_MISC_ENABLE = rdmsr64(MSR_IA32_MISC_ENABLE);
     org_MSR_IA32_PERF_CTL = rdmsr64(MSR_IA32_PERF_CTL);
     org_MSR_IA32_POWER_CTL = rdmsr64(MSR_IA32_POWER_CTL);
+
     if (cpu_info.supportedHWP) {
         // Do not read MSR_IA32_HWP_REQUEST on unsupported HWP's CPU (otherwise will cause panic)
         org_HWPRequest = rdmsr64(MSR_IA32_HWP_REQUEST);
     }
+
     org_TurboRatioLimit = rdmsr64(MSR_TURBO_RATIO_LIMIT);
 
     LOG("succeeded!");
+
     return true;
 }
 
-const char* CPUTune::getStringPropertyOrElse(const char* key, const char* defaultProperty) const {
+const char* CPUTune::getStringPropertyOrElse(const char* key, const char* defaultProperty) const
+{
     if (OSString* value = OSDynamicCast(OSString, getProperty(key))) {
         return value->getCStringNoCopy();
     }
     return defaultProperty;
 }
 
-const bool CPUTune::getBooleanOrElse(const char* key, const bool defaultValue) const {
+const bool CPUTune::getBooleanOrElse(const char* key, const bool defaultValue) const
+{
     if (OSBoolean* value = OSDynamicCast(OSBoolean, getProperty(key))) {
         return value->isTrue();
     }
@@ -98,16 +107,15 @@ bool CPUTune::start(IOService *provider)
         LOG("cannot start provider or provider does not exist.");
         return false;
     }
-
     // let's turn off some of the SIP bits so that we can debug it easily on a real mac
     if (allowUnrestrictedFS) {
         sip_tune.allowUnrestrictedFS();
     }
-
     // set up time event
     myWorkLoop = static_cast<IOWorkLoop *>(getWorkLoop());
     timerSource = IOTimerEventSource::timerEventSource(this,
                     OSMemberFunctionCast(IOTimerEventSource::Action, this, &CPUTune::readConfigAtRuntime));
+
     if (!timerSource) {
         LOG("failed to create timer event source!");
         // Handle error (typically by returning a failure result).
@@ -121,21 +129,20 @@ bool CPUTune::start(IOService *provider)
     }
 
     timerSource->setTimeoutMS(updateInterval);
-
     // check if we need to enable Intel Turbo Boost
     if (enableIntelTurboBoost) {
         enableTurboBoost();
-    } else {
+    }
+    else {
         disableTurboBoost();
     }
-
     // make sure we disable ProcHot only if turboboost is disabled
     if (enableIntelProcHot) {
         enableProcHot();
-    } else {
+    }
+    else {
         disableProcHot();
     }
-
     // check if we need to enable Intel Speed Shift on platform on Skylake+
     if (cpu_info.supportedHWP) {
         if (!hwpEnableOnceSet && enableIntelSpeedShift) {
@@ -145,12 +152,15 @@ bool CPUTune::start(IOService *provider)
             enableSpeedShift();
             hwpEnableOnceSet = true;
         } 
-    } else {
+    }
+    else {
         LOG("cpu model (0x%x) does not support Intel SpeedShift.", cpu_info.model);
     }
 
     LOG("registerService");
+
     registerService();
+
     return true;
 }
 
@@ -173,16 +183,17 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             deleter(buffer);
         }
     }
-
     // Turbo ratio limit
     if ((rdmsr64(MSR_IA32_MISC_ENABLE) & kEnableTurboBoostBits) && cpu_info.turboRatioLimitRW && turboRatioLimitConfigPath) {
         size_t valid_length = cpu_info.coreCount * 2 + 2; // +2 for '0x'/'0X'
         if (uint8_t* config = readFileAsBytes(turboRatioLimitConfigPath, 0, valid_length)) {
             long limit = hexToInt(reinterpret_cast<char*>(config));
             deleter(config);
+
             if (limit == ERANGE) {
                 LOG("Turbo ratio limit is not a valid hexadecimal constant at %s", limit, turboRatioLimitConfigPath);
-            } else {
+            }
+            else {
                 uint64_t curLimit = rdmsr64(MSR_TURBO_RATIO_LIMIT);
                 uint64_t usrLimit = static_cast<uint64_t>(limit);
                 if (setIfNotEqual(curLimit, usrLimit, MSR_TURBO_RATIO_LIMIT)) {
@@ -196,7 +207,8 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
         if (uint8_t *buffer = readFileAsBytes(ProcHotPath, 0, 1)) {
             if (*buffer == '1') {
                 enableProcHot();
-            } else {
+            }
+            else {
                 disableProcHot();
             }
             deleter(buffer);
@@ -209,9 +221,11 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
             // let's check if the hex is valid before writing to MSR
             long req = hexToInt(reinterpret_cast<char*>(hex));
             deleter(hex);
+
             if (req == ERANGE) {
                 LOG("HWP Request %s is not a valid hexadecimal constant at %s", hex, hwpRequestConfigPath);
-            } else {
+            }
+            else {
                 uint64_t curHWPRequest = rdmsr64(MSR_IA32_HWP_REQUEST);
                 uint64_t usrHWPRequest = static_cast<uint64_t>(req);
                 if (setIfNotEqual(curHWPRequest, usrHWPRequest, MSR_IA32_HWP_REQUEST)) {
@@ -225,7 +239,8 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
         if (uint8_t *buffer = readFileAsBytes(speedShiftPath, 0, 1)) {
             if (*buffer == '1') {
                 enableSpeedShift();
-            } else {
+            }
+            else {
                 disableSpeedShift();
             }
             deleter(buffer);
@@ -238,7 +253,8 @@ void CPUTune::readConfigAtRuntime(OSObject *owner, IOTimerEventSource *sender)
     }
 }
 
-bool CPUTune::setIfNotEqual(const uint64_t current, const uint64_t expect, const uint32_t msr) const {
+bool CPUTune::setIfNotEqual(const uint64_t current, const uint64_t expect, const uint32_t msr) const
+{
     bool needWrite = current != expect;
     if (needWrite) {
         wrmsr64(msr, expect);

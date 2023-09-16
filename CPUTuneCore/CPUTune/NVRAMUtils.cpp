@@ -7,7 +7,6 @@
 //
 
 #include "NVRAMUtils.hpp"
-
 #include "kern_util.hpp"
 
 #include <libkern/version.h>
@@ -15,25 +14,30 @@
 #include <IOKit/IONVRAM.h>
 #include <IOKit/IORegistryEntry.h>
 
-bool NVRAMUtils::setKextPanicKey(void) const {
+bool NVRAMUtils::setKextPanicKey(void) const
+{
     return this->setProperty(kCPUTUNE_PANIC_KEY, osrelease, static_cast<unsigned int>(strlen(osrelease)));
 }
 
-bool NVRAMUtils::clearKextPanicKey() const {
+bool NVRAMUtils::clearKextPanicKey() const
+{
     return this->removeProperty(kCPUTUNE_PANIC_KEY);
 }
 
-bool NVRAMUtils::isKextPanicLastBoot() const {
+bool NVRAMUtils::isKextPanicLastBoot() const
+{
     size_t len = 15;
     char ver[len + 1];
     // Get the entry
     if (0 == this->getProperty(kCPUTUNE_PANIC_KEY, ver, &len)) {
         return false;
     }
+
     return strncmp(ver, osrelease, len);
 }
 
-IODTNVRAM *NVRAMUtils::getNVRAMEntry(void) const {
+IODTNVRAM *NVRAMUtils::getNVRAMEntry(void) const
+{
     IORegistryEntry *entry = IORegistryEntry::fromPath("/options", gIODTPlane);
     if (!entry) {
         LOG("Failed to get NVRAM entry!");
@@ -50,7 +54,8 @@ IODTNVRAM *NVRAMUtils::getNVRAMEntry(void) const {
     return nvram;
 }
 
-int NVRAMUtils::getProperty(const char *symbol, void *value, size_t *len) const {
+int NVRAMUtils::getProperty(const char *symbol, void *value, size_t *len) const
+{
     if (!symbol || !len) {
         return 0;
     }
@@ -76,24 +81,28 @@ int NVRAMUtils::getProperty(const char *symbol, void *value, size_t *len) const 
             return 1;
         }
         memcpy(value, s->getCStringNoCopy(), min(*len, vlen));
-    } else if (OSData *data = OSDynamicCast(OSData, o)) {
+    }
+    else if (OSData *data = OSDynamicCast(OSData, o)) {
         *len = (size_t)data->getLength();
         if (!value) {
             nvram->release();
             return 1;
         }
         memcpy((void *)value, data->getBytesNoCopy(), min(*len, vlen));
-    } else {
+    }
+    else {
         LOG("Unsupported type in NVRAM property: %s", o->getMetaClass()->getClassName());
         nvram->release();
         return 0;
     }
+
     nvram->release();
+
     return 1;
 }
 
-
-int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) const {
+int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) const
+{
     if (symbol == nullptr || value == nullptr) {
         return 0;
     }
@@ -117,14 +126,17 @@ int NVRAMUtils::setProperty(const char *symbol, const void *value, size_t len) c
     }
     // Set nvram property
     int ret = nvram->setProperty(sym, data);
+
     nvram->sync();
     nvram->release();
     data->release();
     sym->release();
+
     return ret;
 }
 
-int NVRAMUtils::removeProperty(const char *symbol) const {
+int NVRAMUtils::removeProperty(const char *symbol) const
+{
     if (!symbol) {
         return 0;
     }
@@ -144,5 +156,6 @@ int NVRAMUtils::removeProperty(const char *symbol) const {
     nvram->sync();
     nvram->release();
     sym->release();
+
     return 1;
 }

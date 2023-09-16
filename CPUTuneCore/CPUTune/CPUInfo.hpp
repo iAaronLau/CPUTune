@@ -9,7 +9,9 @@
 #define CPUInfo_hpp
 
 #include "kern_util.hpp"
+
 #include <i386/cpuid.h>
+
 /* Copied from xnu/osfmk/cpuid.c (modified for 64-bit values) */
 #define bit(n)                 (1UL << (n))
 #define bitmask64(h, l)        ((bit(h) | (bit(h) - 1)) & ~ (bit(l) - 1))
@@ -33,18 +35,15 @@
 #define MSR_TURBO_RATIO_LIMIT1      0x1AE
 #define MSR_TURBO_RATIO_LIMIT2      0x1AF
 
-class CPUInfo {
+class CPUInfo
+{
 public:
     CPUInfo() :
-        model(getCPUModel()),
-        supportedHWP(supportedSpeedShift()),
-        coreCount(getCoreCount()),
-        turboRatioLimitRW(getTurboRatioLimitRW()) {
-        LOG("cpu model: 0x%x, %s HWP, number of cores: %d, turbo ratio limit permission: %s",
-              model,
-              (supportedHWP ? "supported" : "unsupported"),
-              coreCount,
-              (turboRatioLimitRW ? "RW" : "RO"));
+    model(getCPUModel()),
+    supportedHWP(supportedSpeedShift()),
+    coreCount(getCoreCount()),
+    turboRatioLimitRW(getTurboRatioLimitRW()) {
+        LOG("cpu model: 0x%x, %s HWP, number of cores: %d, turbo ratio limit permission: %s", model, (supportedHWP ? "supported" : "unsupported"), coreCount, (turboRatioLimitRW ? "RW" : "RO"));
     };
 
     /**
@@ -104,6 +103,7 @@ public:
         CPU_MODEL_HASWELL_EP     =  0x3F,
         CPU_MODEL_HASWELL_ULT    =  0x45,
         CPU_MODEL_BROADWELL      =  0x3D,
+        CPU_MODEL_BROADWELL_EP   =  0x4F,
         CPU_MODEL_BROADWELL_ULX  =  0x3D,
         CPU_MODEL_BROADWELL_ULT  =  0x3D,
         CPU_MODEL_BRYSTALWELL    =  0x47,
@@ -126,7 +126,8 @@ public:
         CPU_MODEL_ROCKETLAKE_S   =  0xA7, /* desktop RocketLake */
         CPU_MODEL_TIGERLAKE_U    =  0x8C,
         CPU_MODEL_ALDERLAKE_S    =  0x97,
-        CPU_MODEL_RAPTORLAKE_S   =  0xB7,
+        CPU_MODEL_RAPTORLAKE_S   =  0xB7, /* Raptor Lake B0 stepping */
+        CPU_MODEL_RAPTORLAKE_HX  =  0xBF, /* Raptor Lake C0 stepping */
     };
 };
 

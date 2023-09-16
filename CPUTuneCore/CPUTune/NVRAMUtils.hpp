@@ -14,7 +14,8 @@
 
 static constexpr char kCPUTUNE_PANIC_KEY[] = "cputune-panic";
 
-class NVRAMUtils {
+class NVRAMUtils
+{
 public:
     int getProperty(const char *symbol, void *value, size_t *len) const;
     int setProperty(const char *symbol, const void * value, size_t len) const;

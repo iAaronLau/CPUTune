@@ -6,6 +6,7 @@
 //
 
 #include "kern_util.hpp"
+
 #include <sys/types.h>
 #include <sys/vnode.h>
 #include <sys/fcntl.h>
@@ -15,7 +16,8 @@ uint32_t ADDPR(debugPrintDelay) = 0;
 
 long logFileOffset = 0L;
 
-errno_t writeBufferToFile(const char *path, char *buffer) {
+errno_t writeBufferToFile(const char *path, char *buffer)
+{
     errno_t err = 0;
     int length = static_cast<int>(strlen(buffer));
     vnode_t vp = NULLVP;
@@ -27,14 +29,17 @@ errno_t writeBufferToFile(const char *path, char *buffer) {
     if (ctxt) {
         if ((err = vnode_open(path, fmode, cmode, VNODE_LOOKUP_NOFOLLOW, &vp, ctxt))) {
             LOG("vnode_open(%s) failed with error %d!", path, err);
-        } else {
+        }
+        else {
             if ((err = vnode_isreg(vp)) == VREG) {
                 if ((err = vn_rdwr(UIO_WRITE, vp, buffer, length, logFileOffset, UIO_SYSSPACE, IO_NOCACHE|IO_NODELOCKED|IO_UNIT, vfs_context_ucred(ctxt), (int *) 0, vfs_context_proc(ctxt)))) {
                     LOG("vn_rdwr(%s) failed with error %d!", path, err);
-                } else {
+                }
+                else {
                     logFileOffset += length;
                 }
-            } else {
+            }
+            else {
                 LOG("vnode_isreg(%s) failed with error %d!", path, err);
             }
 
@@ -43,7 +48,8 @@ errno_t writeBufferToFile(const char *path, char *buffer) {
             }
         }
         vfs_context_rele(ctxt);
-    } else {
+    }
+    else {
         LOG("cannot obtain ctxt!");
         err = 0xFFFF;
     }
@@ -51,7 +57,8 @@ errno_t writeBufferToFile(const char *path, char *buffer) {
     return err;
 }
 
-int readFileData(void *buffer, off_t off, size_t size, vnode_t vnode, vfs_context_t ctxt) {
+int readFileData(void *buffer, off_t off, size_t size, vnode_t vnode, vfs_context_t ctxt)
+{
     uio_t uio = uio_create(1, off, UIO_SYSSPACE, UIO_READ);
     if (!uio) {
         // LOG("readFileData: uio_create returned null!");
@@ -76,7 +83,8 @@ int readFileData(void *buffer, off_t off, size_t size, vnode_t vnode, vfs_contex
     return error;
 }
 
-uint8_t *readFileAsBytes(const char* path, off_t off, size_t bytes) {
+uint8_t *readFileAsBytes(const char* path, off_t off, size_t bytes)
+{
     vnode_t vnode = NULLVP;
     vfs_context_t ctx = vfs_context_create(nullptr);
 
@@ -99,15 +107,18 @@ uint8_t *readFileAsBytes(const char* path, off_t off, size_t bytes) {
                     kern_os_free(buffer);
                     buffer = nullptr;
                 }
-            } else {
+            }
+            else {
                 // gurantee null termination
                 buffer[bytes] = 0;
             }
-        } else {
+        }
+        else {
             // size of the file is empty or bytes is zero
         }
         vnode_put(vnode);
-    } else {
+    }
+    else {
         // fail to find file via path
     }
 
@@ -117,7 +128,8 @@ uint8_t *readFileAsBytes(const char* path, off_t off, size_t bytes) {
 }
 
 
-void cputune_os_log(const char *format, ...) {
+void cputune_os_log(const char *format, ...)
+{
     char tmp[1024];
     tmp[0] = '\0';
     va_list va;
@@ -133,7 +145,7 @@ void cputune_os_log(const char *format, ...) {
     // Note we cannot write the log at bootstrap which will cause kernel panic
     const char *path = "/var/log/cputune.kext.log";
     writeBufferToFile(path, tmp);
-#endif /* DEBUG */
+#endif /* (DEBUG && DEBUG_AFTER_BOOTSTRAP) */
 
     if (ml_get_interrupts_enabled() && ADDPR(debugPrintDelay) > 0)
         IOSleep(ADDPR(debugPrintDelay));

@@ -9,7 +9,6 @@
 
 SIPTune::SIPTune() : gBootCSRActiveConfig(getBootCSRActiveConfig())
 {
-    
 }
 
 SIPTune::~SIPTune()
