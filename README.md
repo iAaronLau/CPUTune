@@ -18,8 +18,10 @@ An open source kernel extension enables dynamic CPU performance tuning at runtim
 - Download the repo and open the `CPUTuneCore/CPUTuneCore.xcodeproj` via Xcode
 - Navigate to `Product` then click `Build`. Once the compiled completed, you will find `CPUTuneCore.kext` in the `Product` folder, copy it to `/Library/Extensions`
 - Change the `CPUTuneCore.kext` ownership to `root:wheel`, mode to `rwxr-xr-x` (or `755`)
-- Rebuild the kernel cache in terminal: `sudo touch /Library/Extensions; sudo kextcache -i /`, reboot
+- Rebuild the kernel cache in terminal: `sudo touch /Library/Extensions; sudo kextcache -i /`, reboot 
+- (Ventura) At this step, your Mac may not be able to login to the desktop. 
 - [Enable the SIP](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) back and reboot
+- (Ventura) You can login normally. 
 
 #### Boot arguments
 - Add `-cputoff` to disable CPUTune

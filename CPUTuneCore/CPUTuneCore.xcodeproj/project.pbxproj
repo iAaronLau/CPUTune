@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29E2A9392B8C7A580024D7D4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29C3C9ED2B8C6C3400DDB5C0 /* IOKit.framework */; };
 		CD4042712AB60EC600C810EB /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD4042702AB60EC600C810EB /* libkmod.a */; };
 		E806014721A7D22600B4E214 /* kern_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E806014521A7D22600B4E214 /* kern_util.cpp */; };
 		E806014821A7D22600B4E214 /* kern_util.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E806014621A7D22600B4E214 /* kern_util.hpp */; };
@@ -22,6 +23,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		29C3C9ED2B8C6C3400DDB5C0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		29C3C9F22B8C6E6500DDB5C0 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
+		29C3C9F42B8C6F0100DDB5C0 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
+		29C3C9F62B8C6F0800DDB5C0 /* KernelManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KernelManagement.framework; path = System/Library/Frameworks/KernelManagement.framework; sourceTree = SDKROOT; };
 		CD4042702AB60EC600C810EB /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		E806014521A7D22600B4E214 /* kern_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_util.cpp; sourceTree = "<group>"; };
 		E806014621A7D22600B4E214 /* kern_util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_util.hpp; sourceTree = "<group>"; };
@@ -44,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4042712AB60EC600C810EB /* libkmod.a in Frameworks */,
+				29E2A9392B8C7A580024D7D4 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +59,10 @@
 		CDC7D12A274031BF0071DB9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				29C3C9F62B8C6F0800DDB5C0 /* KernelManagement.framework */,
+				29C3C9F42B8C6F0100DDB5C0 /* Kernel.framework */,
+				29C3C9F22B8C6E6500DDB5C0 /* DriverKit.framework */,
+				29C3C9ED2B8C6C3400DDB5C0 /* IOKit.framework */,
 				CD4042702AB60EC600C810EB /* libkmod.a */,
 			);
 			name = Frameworks;
@@ -137,12 +147,12 @@
 		E8D5860B21A7BB1C001CCF6A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1320;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = syscl;
 				TargetAttributes = {
 					E8D5861321A7BB1C001CCF6A = {
 						CreatedOnToolsVersion = 10.1;
-						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -194,7 +204,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -226,9 +235,11 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXCLUDED_ARCHS = arm64e;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -244,9 +255,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = /Library/Extensions;
 				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -259,7 +271,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -291,9 +302,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXCLUDED_ARCHS = arm64e;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -304,11 +318,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
-				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				INSTALL_PATH = /Library/Extensions;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
+				KERNEL_FRAMEWORK_HEADERS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -322,22 +338,29 @@
 				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2.2.9;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 34H7995YFL;
 				INFOPLIST_FILE = CPUTune/Info.plist;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
+				KERNEL_FRAMEWORK_HEADERS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
+					"/Library/Developer/CommandLineTools/SDKs/**",
+					"/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 2.2.9;
 				MODULE_NAME = org.syscl.driver.CPUTune;
 				MODULE_VERSION = 2.2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = org.syscl.driver.CPUTune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -348,22 +371,29 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2.2.9;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 34H7995YFL;
 				INFOPLIST_FILE = CPUTune/Info.plist;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
+				KERNEL_FRAMEWORK_HEADERS = /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Kernel.framework/Headers;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
+					"/Library/Developer/CommandLineTools/SDKs/**",
+					"/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 2.2.9;
 				MODULE_NAME = org.syscl.driver.CPUTune;
 				MODULE_VERSION = 2.2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = org.syscl.driver.CPUTune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
