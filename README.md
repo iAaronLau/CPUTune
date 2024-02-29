@@ -1,5 +1,5 @@
 
-CPUTune
+CPUTune 🆘 This version does not work.
 ====
 An open source kernel extension enables dynamic CPU performance tuning at runtime for macOS.
 
