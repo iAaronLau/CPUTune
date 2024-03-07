@@ -1,6 +1,9 @@
 
 CPUTune 🆘 This version does not work.
 ====
+
+# __I believe this kext will not work on Venture and newer systems (even if disabled the SIP), and fortunately, we can install OpenCore-Patcher instead to realise the same purpose.__
+
 An open source kernel extension enables dynamic CPU performance tuning at runtime for macOS.
 
 #### Features
@@ -19,9 +22,7 @@ An open source kernel extension enables dynamic CPU performance tuning at runtim
 - Navigate to `Product` then click `Build`. Once the compiled completed, you will find `CPUTuneCore.kext` in the `Product` folder, copy it to `/Library/Extensions`
 - Change the `CPUTuneCore.kext` ownership to `root:wheel`, mode to `rwxr-xr-x` (or `755`)
 - Rebuild the kernel cache in terminal: `sudo touch /Library/Extensions; sudo kextcache -i /`, reboot 
-- (Ventura) At this step, your Mac may not be able to login to the desktop. 
 - [Enable the SIP](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) back and reboot
-- (Ventura) You can login normally. 
 
 #### Boot arguments
 - Add `-cputoff` to disable CPUTune
